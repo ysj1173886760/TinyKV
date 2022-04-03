@@ -9,10 +9,7 @@
  * 
  */
 
-#ifndef RBTREE_CPP
-#define RBTREE_CPP
-
-#include <iostream>
+#include "memtable.h"
 #include "rbtree.h"
 
 namespace TinyKV {
@@ -368,19 +365,3 @@ void RBTree<KeyType, ValueType, Compare>::remove(const KeyType &key) {
 }
 
 }
-
-int main() {
-    TinyKV::RBTree<int, int> tree;
-    std::cout << tree.empty() << " " << tree.size() << std::endl;
-    for (int i = 1; i <= 10; i++) {
-        tree.put(i, i * 2);
-        std::cout << tree.empty() << " " << tree.size() << std::endl;
-    }
-    tree.remove(7);
-    std::cout << tree.empty() << " " << tree.size() << std::endl;
-    for (int i = 10; i >= 1; i--) {
-        std::cout << tree.get(i) << std::endl;
-    }
-}
-
-#endif
