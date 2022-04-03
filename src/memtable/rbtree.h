@@ -29,8 +29,7 @@ private:
     struct Node {
         KeyType _key;
         ValueType _value;
-        // true for red, false for black
-        bool _color;
+        bool _red;
         Node *_fa;
         Node *_ls;
         Node *_rs;
@@ -38,7 +37,7 @@ private:
 
         Node(KeyType key = KeyType(),
              ValueType value = ValueType(),
-             bool color = true,
+             bool red = true,
              Node *fa = nullptr,
              Node *ls = nullptr,
              Node *rs = nullptr,
@@ -46,7 +45,7 @@ private:
              ): 
             _key(key),
             _value(value),
-            _color(color),
+            _red(red),
             _fa(fa),
             _ls(ls),
             _rs(rs),
@@ -94,8 +93,17 @@ private:
             }
         }
 
-        Node *get_bro() {
+        Node *getBrother() {
             return _fa->_ls == this ? _fa->_rs : _fa->_ls;
+        }
+
+        Node *getSucc() {
+            Node *cur = _rs;
+            while (cur->_ls != nullptr) {
+                cur->_size--;
+                cur = cur->_ls;
+            }
+            return cur;
         }
     };
 
