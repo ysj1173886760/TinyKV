@@ -106,6 +106,7 @@ void RBTree<KeyType, ValueType, Compare>::solveDoubleRed(Node *cur) {
                     grdfa->_red = true;
                 } else {
                     // lr
+                    cur->_fa = grdfa->_fa;
                     if (grdfa == _root) {
                         _root = cur;
                     } else if (grdfa->_fa->_ls == grdfa) {
@@ -233,7 +234,7 @@ void RBTree<KeyType, ValueType, Compare>::solveDoubleBlack(Node *cur) {
                     if (fa->_fa->_ls == fa) {
                         fa->_fa->_ls = brother->_ls;
                     } else {
-                        fa->_fa->_rs = brother->_rs;
+                        fa->_fa->_rs = brother->_ls;
                     }
                 }
                 brother->_ls->_fa = fa->_fa;

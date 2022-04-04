@@ -2,6 +2,7 @@
 #include <random>
 #include <map>
 #include "memtable/rbtree.h"
+#include "common/logger.h"
 
 namespace TinyKV {
 
@@ -36,8 +37,7 @@ std::vector<int> getRandomData(int testSize,
 
     std::vector<int> data;
     for (int i = 0; i < testSize; i++) {
-        // data.emplace_back(dis(mt));
-        data.push_back(i);
+        data.emplace_back(dis(mt));
     }
     return data;
 }
@@ -45,9 +45,10 @@ std::vector<int> getRandomData(int testSize,
 TEST(RBTreeTest, StrongTest) {
     RBTree<int, int> tree;
     const int MAX = 1e7;
-    const int testSize = 1e2;
+    const int testSize = 1e6;
 
     std::vector<int> testData = getRandomData(testSize, -MAX, MAX);
+    // LOG_DEBUG("start testing");
 
     std::map<int, int> mp;
     for (const auto &x : testData) {
@@ -56,9 +57,13 @@ TEST(RBTreeTest, StrongTest) {
     }
     EXPECT_EQ(mp.size(), tree.size());
 
+    // LOG_DEBUG("insertion complete");
+
     for (const auto &x : testData) {
         EXPECT_EQ(tree.get(x), x * 2);
     }
+
+    // LOG_DEBUG("query complete");
 
     for (const auto &x : testData) {
         if (x > 0) {
@@ -67,11 +72,16 @@ TEST(RBTreeTest, StrongTest) {
         mp.erase(x);
         tree.remove(x);
     }
+
     EXPECT_EQ(mp.size(), tree.size());
+
+    // LOG_DEBUG("remove complete");
     
     for (const auto &[key, val] : mp) {
         EXPECT_EQ(tree.get(key), val);
     }
+
+    // LOG_DEBUG("query complete");
 }
 
 }
