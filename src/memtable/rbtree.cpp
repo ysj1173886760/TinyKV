@@ -306,6 +306,19 @@ void RBTree<KeyType, ValueType, Compare>::solveDoubleBlack(Node *cur) {
 }
 
 template< class KeyType, class ValueType, class Compare >
+typename RBTree<KeyType, ValueType, Compare>::Node*
+RBTree<KeyType, ValueType, Compare>::getFirstElement() {
+    if (_root == nullptr) {
+        return nullptr;
+    }
+    Node *cur = _root;
+    while (cur->_ls) {
+        cur = cur->_ls;
+    }
+    return cur;
+}
+
+template< class KeyType, class ValueType, class Compare >
 ValueType RBTree<KeyType, ValueType, Compare>::get(const KeyType &key) {
     Node *cur = rfind(key);
     if (!cur) {

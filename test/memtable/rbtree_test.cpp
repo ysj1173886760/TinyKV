@@ -45,7 +45,7 @@ std::vector<int> getRandomData(int testSize,
 TEST(RBTreeTest, StrongTest) {
     RBTree<int, int> tree;
     const int MAX = 1e7;
-    const int testSize = 1e6;
+    const int testSize = 1e5;
 
     std::vector<int> testData = getRandomData(testSize, -MAX, MAX);
     // LOG_DEBUG("start testing");
@@ -82,6 +82,32 @@ TEST(RBTreeTest, StrongTest) {
     }
 
     // LOG_DEBUG("query complete");
+}
+
+TEST(RBTreeTest, IteratorTest) {
+    RBTree<int, int> tree;
+    const int MAX = 1e7;
+    const int testSize = 1e3;
+
+    std::vector<int> testData = getRandomData(testSize, -MAX, MAX);
+
+    std::map<int, int> mp;
+    for (const auto &x : testData) {
+        mp[x] = x * 2;
+        tree.put(x, x * 2);
+    }
+
+    EXPECT_EQ(mp.size(), tree.size());
+    std::vector<int> iterate_tree, iterate_map;
+    for (const auto &x : tree) {
+        iterate_tree.push_back(x.first);
+    }
+    for (const auto &x : mp) {
+        iterate_map.push_back(x.first);
+    }
+    for (size_t i = 0; i < iterate_map.size(); i++) {
+        EXPECT_EQ(mp[i], tree.get(i));
+    }
 }
 
 }

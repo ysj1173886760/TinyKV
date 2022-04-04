@@ -116,6 +116,7 @@ private:
     void solveDoubleRed(Node *cur);
     void solveDoubleBlack(Node *cur);
     Node *rfind(const KeyType &key, const int op = 0);
+    Node *getFirstElement();
 
 public:
     RBTree(const Compare &comp = Compare()): _Base(comp), _root(nullptr), _hot(nullptr) {}
@@ -123,11 +124,52 @@ public:
         destroy(_root);
     }
 
+    struct iterator;
+
     ValueType get(const KeyType &key);
     void put(const KeyType &key, ValueType value);
     void remove(const KeyType &key);
     int size();
     bool empty();
+
+    iterator begin() {
+        return iterator(getFirstElement());
+    }
+    iterator end() {
+        return iterator();
+    }
+};
+
+template< class KeyType, class ValueType, class Compare>
+struct RBTree<KeyType, ValueType, Compare>::iterator {
+private:
+    Node *_node;
+
+public:
+    iterator& operator--() {
+        _node = _node->leftNode();
+        return *this;
+    }
+
+    iterator& operator++() {
+        _node = _node->rightNode();
+        return *this;
+    }
+
+    std::pair<KeyType, ValueType> operator*() {
+        return std::make_pair(_node->_key, _node->_value);
+    }
+
+    Node *operator->() {
+        return _node;
+    }
+
+    iterator(Node *node = nullptr): _node(node) {}
+    iterator(const iterator &iter): _node(iter._node) {}
+
+    bool operator!=(const iterator &iter) {
+        return iter._node != _node;
+    }
 };
 
 }
