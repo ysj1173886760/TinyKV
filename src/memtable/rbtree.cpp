@@ -364,4 +364,6 @@ void RBTree<KeyType, ValueType, Compare>::remove(const KeyType &key) {
     return;
 }
 
+template class RBTree<int, int>;
+
 }
